@@ -23,20 +23,13 @@ git push -u origin main
    - `todo-postgres` (PostgreSQL database)
 4. Click `Apply`.
 
-## 3) Update CORS After First Deploy
+## 3) CORS on Render Is Dynamic
 
-After Render creates the static site URL, update API env var:
+`render.yaml` already sets:
 
-- Service: `todo-api`
-- Env var: `BACKEND_CORS_ORIGINS`
+- `BACKEND_CORS_ORIGIN_REGEX=https://.*\.onrender\.com`
 
-Use your real UI URL:
-
-```text
-["https://todo-ui.onrender.com"]
-```
-
-If your generated frontend URL differs, use that exact domain.
+So any Render-hosted frontend URL is accepted automatically.
 
 ## 4) Set Frontend API URL
 
