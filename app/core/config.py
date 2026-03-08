@@ -37,5 +37,14 @@ class Settings(BaseSettings):
             return [str(item).strip() for item in parsed if str(item).strip()]
         return [item.strip() for item in raw.split(",") if item.strip()]
 
+    @property
+    def sqlalchemy_database_url(self) -> str:
+        url = self.database_url
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+psycopg://", 1)
+        if url.startswith("postgresql://") and "+psycopg" not in url:
+            return url.replace("postgresql://", "postgresql+psycopg://", 1)
+        return url
+
 
 settings = Settings()
