@@ -1,6 +1,5 @@
 import json
 
-from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -20,27 +19,23 @@ class Settings(BaseSettings):
     secret_key: str = "CHANGE_ME_IN_PRODUCTION"
     access_token_expire_minutes: int = 60
     jwt_algorithm: str = "HS256"
-    backend_cors_origins: list[str] = [
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
-        "http://127.0.0.1:8080",
+    backend_cors_origins: str = (
+        "http://127.0.0.1:5500,"
+        "http://localhost:5500,"
+        "http://127.0.0.1:8080,"
         "http://localhost:8080"
-    ]
+    )
     backend_cors_origin_regex: str | None = r"https://.*\.onrender\.com"
 
-    @field_validator("backend_cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, value):
-        if isinstance(value, list):
-            return value
-        if isinstance(value, str):
-            raw = value.strip()
-            if not raw:
-                return []
-            if raw.startswith("["):
-                return json.loads(raw)
-            return [item.strip() for item in raw.split(",") if item.strip()]
-        return value
+    @property
+    def cors_origins_list(self) -> list[str]:
+        raw = (self.backend_cors_origins or "").strip()
+        if not raw:
+            return []
+        if raw.startswith("["):
+            parsed = json.loads(raw)
+            return [str(item).strip() for item in parsed if str(item).strip()]
+        return [item.strip() for item in raw.split(",") if item.strip()]
 
 
 settings = Settings()
