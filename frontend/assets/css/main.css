@@ -1,0 +1,27 @@
+:root {
+  --app-bg: #f4f6f9;
+}
+
+body {
+  background: linear-gradient(180deg, var(--app-bg) 0%, #ffffff 70%);
+  min-height: 100vh;
+}
+
+.auth-card {
+  max-width: 460px;
+}
+
+.todo-item-title {
+  font-weight: 600;
+}
+
+.todo-item-done .todo-item-title {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.spinner-btn {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
